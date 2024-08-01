@@ -13,6 +13,7 @@ namespace MyLibrary.Models
         [NotMapped]
         public string? SerieName { get; set; }
         [NotMapped]
-        public string GenreName { get; set; }
+        //public int? GenreId { get; set; }
+        public Genre Genre { get; set; }
     }
 }

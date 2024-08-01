@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
@@ -63,7 +64,7 @@ namespace MyLibrary.Controllers
             if (ModelState.IsValid)
             {
                 var genre = await _context.Genre.
-                    Where(b => b.Name == book.GenreName).FirstOrDefaultAsync();
+                    Where(b => b.Name == book.Name).FirstOrDefaultAsync();
                 //first we need to get a serie to push it into the shelf
                 book.Serie = _context.Serie.FirstOrDefault(s => s.Name == book.SerieName);
                 //if we have not a serie we can to push it to the serie
@@ -103,6 +104,51 @@ namespace MyLibrary.Controllers
                     await _context.SaveChangesAsync();
 
                 }
+                else
+                {
+                    //מכניסים את פרטי הסט
+                    book.Serie.WidthOfAll += book.Width;
+                    if(book.Height > book.Serie.MaxHeight)
+                        book.Serie.MaxHeight = book.Height;
+                    _context.Update(book.Serie);
+                    _context.SaveChanges();
+                    //מלכתחילה אנחנו רוצים להכניס לאיפה שנמצא  הסט
+                    var shelf = _context.Shelf
+                        .Where(s => s.LeftWidth - book.Width >= 0 && s.Height >= book.Height && s.Id == book.Serie.ShelfId)
+                        .FirstOrDefault();
+                    if (shelf != null)
+                    {
+                        book.Serie.Shelf.LeftWidth -= book.Width;
+                    }
+                    //במקרה שצריך מדף אחר
+                    if (shelf == null)
+                    {
+                        book.Serie.Shelf.LeftWidth -= (book.Serie.WidthOfAll + book.Width);
+                        shelf = _context.Shelf
+                        .Where(s => s.LeftWidth - book.Serie.WidthOfAll >= 0 && s.Height >= book.Serie.MaxHeight && genreId == s.Genre.Id)
+                        .OrderByDescending(s => s.Height - book.Height)
+                        .FirstOrDefault();
+                    }
+                    //אין לזה בכלל מקום
+                    if (shelf == null)
+                        return NotFound();
+                    /**/
+
+                    if (shelf.Height - book.Serie.MaxHeight > 10)
+                    {
+                        //לא מיושם עדיין
+                        Console.WriteLine("FGHNJ");
+                    }
+                    book.Serie.Shelf = shelf;
+                    book.Serie.Shelf.LeftWidth -= book.Serie.WidthOfAll;
+                    _context.Update(book.Serie.Shelf);
+                    _context.Update(book.Serie);
+                    _context.Book.Add(book);
+                    //_context.Update(book);
+                    //_context.Update(serie);
+                    await _context.SaveChangesAsync();
+                }
+                
                 //_context.Add(book);
                 //await _context.SaveChangesAsync();
                 //_context.Add(book);
