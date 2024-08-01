@@ -60,6 +60,9 @@ namespace MyLibrary.Controllers
             {
                 shelf.LeftWidth = shelf.Width;
                 shelf.Genre = _context.Genre.FirstOrDefault(g => g.Name == shelf.genreName);
+                //אנחנו בודקים אם יש פה כזה ז'אנר
+                if (shelf.genreName == null)
+                    return NotFound();
                 _context.Add(shelf);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

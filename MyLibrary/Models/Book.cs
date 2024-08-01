@@ -7,11 +7,11 @@ namespace MyLibrary.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int? SerieId { get; set; }
-        public Serie Serie { get; set; }
+        public Serie? Serie { get; set; }
         public decimal Height { get; set; }
         public decimal Width { get; set; }
         [NotMapped]
-        public string SerieName { get; set; }
+        public string? SerieName { get; set; }
         [NotMapped]
         public string GenreName { get; set; }
     }

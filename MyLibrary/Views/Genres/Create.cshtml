@@ -1,12 +1,8 @@
 ﻿@model MyLibrary.Models.Genre
-
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>Genre</h4>
+<h1>יצירת קטגוריה</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,11 +19,11 @@
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">חזרה לרשימת קטגוריות</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

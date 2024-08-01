@@ -8,18 +8,31 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MyLibrary.styles.css" asp-append-version="true" />
     <style>
-        body {
+        html, body {
+            height: 100%;
+            margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E0F7FA;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
         }
 
         header {
             margin-bottom: 2rem;
         }
 
+        .content {
+            flex: 1;
+        }
+
         footer {
             padding: 1rem 0;
             background-color: #F8F9FA;
             border-top: 1px solid #E9ECEF;
+            text-align: center;
         }
 
         .navbar-brand {
@@ -37,7 +50,7 @@
         }
 
         .box-shadow {
-            box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+            box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .1);
         }
 
         .footer-link {
@@ -54,7 +67,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MyLibrary</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">אוצר הספרים</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -72,23 +85,20 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">דף הבית-מדרש</a>
                         </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">סטים</a>
-                        </li> *@
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container mt-4">
+    <div class="container mt-4 content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="text-center">
+    <footer>
         <div class="container p-4">
             <div class="text-center">
-                &copy; 2024 - MyLibrary - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy</a>
+                &copy; 2024 - MyLibrary - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="footer-link">פרטיות</a>
             </div>
         </div>
     </footer>

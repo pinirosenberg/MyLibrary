@@ -67,14 +67,16 @@ namespace MyLibrary.Controllers
                 //first we need to get a serie to push it into the shelf
                 book.Serie = _context.Serie.FirstOrDefault(s => s.Name == book.SerieName);
                 //if we have not a serie we can to push it to the serie
-                if(book.SerieId == 0)
+                
+                var genreId = genre.Id;
+                if(book.Serie == null)
                 {
                     //we search for a shelf
                     //We are looking for a shelf that satisfies the shelf
                     //condition of max(sheleftwidth - book.width > 0)
                    
                     var shelf = _context.Shelf
-                        .Where(s => s.LeftWidth - book.Width > 0 && s.Height > book.Height && book.GenreName == s.genreName)
+                        .Where(s => s.LeftWidth - book.Width >= 0 && s.Height >= book.Height && genreId == s.Genre.Id)
                         .OrderByDescending(s => s.Height - book.Height)
                         .FirstOrDefault();
                     if (shelf == null)
@@ -91,16 +93,20 @@ namespace MyLibrary.Controllers
                     serie.MaxHeight = book.Height;
                     book.Serie = serie;
                     book.SerieId = serie.Id;
-
+                    shelf.LeftWidth = shelf.LeftWidth - book.Width;
+                    
+                    _context.Update(shelf);
                     _context.Serie.Add(serie);
                     _context.Book.Add(book);
-                    _context.SaveChanges();
+                    //_context.Update(book);
+                    //_context.Update(serie);
+                    await _context.SaveChangesAsync();
 
                 }
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                _context.Add(book);
-                await _context.SaveChangesAsync();
+                //_context.Add(book);
+                //await _context.SaveChangesAsync();
+                //_context.Add(book);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SerieId"] = new SelectList(_context.Serie, "Id", "Id", book.SerieId);
