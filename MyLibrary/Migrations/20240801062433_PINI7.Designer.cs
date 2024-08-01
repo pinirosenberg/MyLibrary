@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLibrary.Data;
 
@@ -11,9 +12,11 @@ using MyLibrary.Data;
 namespace MyLibrary.Migrations
 {
     [DbContext(typeof(MyLibraryContext))]
-    partial class MyLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20240801062433_PINI7")]
+    partial class PINI7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

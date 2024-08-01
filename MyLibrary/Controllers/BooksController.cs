@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Data;
 using MyLibrary.Models;
@@ -57,10 +58,47 @@ namespace MyLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,SerieId,Height,Width")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Name,SerieName,Height,Width,GenreName")] Book book)
         {
             if (ModelState.IsValid)
             {
+                var genre = await _context.Genre.
+                    Where(b => b.Name == book.GenreName).FirstOrDefaultAsync();
+                //first we need to get a serie to push it into the shelf
+                book.Serie = _context.Serie.FirstOrDefault(s => s.Name == book.SerieName);
+                //if we have not a serie we can to push it to the serie
+                if(book.SerieId == 0)
+                {
+                    //we search for a shelf
+                    //We are looking for a shelf that satisfies the shelf
+                    //condition of max(sheleftwidth - book.width > 0)
+                   
+                    var shelf = _context.Shelf
+                        .Where(s => s.LeftWidth - book.Width > 0 && s.Height > book.Height && book.GenreName == s.genreName)
+                        .OrderByDescending(s => s.Height - book.Height)
+                        .FirstOrDefault();
+                    if (shelf == null)
+                        return NotFound();
+                    if (shelf.Height - book.Height > 10)
+                    {
+                        //לא מיושם עדיין
+                        Console.WriteLine("FGHNJ");
+                    }
+                    var serie = new Serie();
+                    serie.Name = book.Name;
+                    serie.Shelf = shelf; 
+                    serie.WidthOfAll = book.Width;
+                    serie.MaxHeight = book.Height;
+                    book.Serie = serie;
+                    book.SerieId = serie.Id;
+
+                    _context.Serie.Add(serie);
+                    _context.Book.Add(book);
+                    _context.SaveChanges();
+
+                }
+                _context.Add(book);
+                await _context.SaveChangesAsync();
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
