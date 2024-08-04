@@ -11,9 +11,9 @@ namespace MyLibrary.Models
         public decimal Height { get; set; }
         public decimal Width { get; set; }
         [NotMapped]
-        public string? SerieName { get; set; }
-        [NotMapped]
+        public string? GenreName { get; set; }
+        //[NotMapped]
         //public int? GenreId { get; set; }
-        public Genre Genre { get; set; }
+        //public Genre Genre { get; set; }
     }
 }

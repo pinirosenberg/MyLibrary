@@ -17,10 +17,10 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SerieName" class="control-label"></label>
-                <select asp-for="SerieName" class="form-control" asp-items="ViewBag.SerieName"></select>
-            </div>
+            @* <div class="form-group">
+                <label asp-for="GenreName" class="control-label"></label>
+                <select asp-for="GenreName" class="form-control" asp-items="ViewBag.SerieName"></select>
+            </div> *@
             <div class="form-group">
                 <label asp-for="Height" class="control-label"></label>
                 <input asp-for="Height" class="form-control" />
@@ -32,9 +32,9 @@
                 <span asp-validation-for="Width" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Width" class="control-label"></label>
-                <input asp-for="Width" class="form-control" />
-                <span asp-validation-for="Width" class="text-danger"></span>
+                <label asp-for="GenreName"  class="control-label"></label>
+                <input asp-for="GenreName" class="form-control" />
+                <span asp-validation-for="GenreName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

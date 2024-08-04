@@ -64,9 +64,9 @@ namespace MyLibrary.Controllers
             if (ModelState.IsValid)
             {
                 var genre = await _context.Genre.
-                    Where(b => b.Name == book.Name).FirstOrDefaultAsync();
+                    Where(b => b.Name == book.GenreName).FirstOrDefaultAsync();
                 //first we need to get a serie to push it into the shelf
-                book.Serie = _context.Serie.FirstOrDefault(s => s.Name == book.SerieName);
+               // book.Serie = _context.Serie.FirstOrDefault(s => s.Name == book.SerieName);
                 //if we have not a serie we can to push it to the serie
                 
                 var genreId = genre.Id;
